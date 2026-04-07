@@ -1,14 +1,16 @@
 package app;
 
-import game.TestYourself;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
+import screens.MainMenu;
 
 public class PlayTestYourself extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) {
-		new TestYourself(primaryStage);
+		new MainMenu(primaryStage);
+		
 		
 	}
 	
