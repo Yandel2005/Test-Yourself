@@ -1,0 +1,81 @@
+ package gameoutput;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import mechanics.Score;
+import users.User;
+
+public class GameData {
+	
+	private Connection connection;
+	private static final String URL = "jdbc:mysql://localhost:3306/mydb";
+    private static final String USER = "root";
+    private static final String PASS = "poop123";
+	
+	public GameData() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection(URL, USER, PASS);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public int insertUser(User user) {
+		String sql = "INSERT INTO Users (username, password) VALUES (?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			stmt.setString(1,  user.getUsername());
+			 stmt.setString(2, "defaultPassword");
+			  stmt.executeUpdate();
+			  ResultSet rs = stmt.getGeneratedKeys();
+			  if(rs.next()) {
+				  return rs.getInt(1);
+			  }
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public User getUserByUsername(String username) {
+		// If the constructor failed, connection is null. Check it!
+        if (connection == null) return null;
+
+        String query = "SELECT * FROM users WHERE username = ?";
+        
+        // Use the existing 'connection' field instead of opening a new one
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Assuming User constructor takes (id, username)
+                    User user = new User(rs.getString("username"));
+                    user.setUserId(rs.getInt("user_id")); 
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+	
+	public void saveScore(Score score, int gameModeId) {
+		String sql = "INSERT INTO Scores (score_value, user_id, game_mode_id) VALUES (?, ?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setInt(1, score.getValue());
+			stmt.setInt(2, score.getUser().getUserId());
+			stmt.setInt(3, score.getGameModeId());
+			stmt.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}
+	

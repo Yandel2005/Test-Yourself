@@ -2,25 +2,28 @@ package users;
 
 public class User {
 
+private int userId;
 private String username;
 private String password;
 private int highscore;
+private int score = 0;
+private int accuracy = 100;
 private double bestAccuracy;
 
-public User(String username, String password) {
+public User(int userId, String username) {
 	this.username = username;
-	this.password = password;
-	this.highscore = 0;
-	this.bestAccuracy = 0.0;
+	this.userId = userId;
 }
 
-public void recordGame(int score, double accuracy) {
-	if(score > highscore) {
-		highscore = score;
-	}
-	if(accuracy > bestAccuracy) {
-		bestAccuracy = accuracy;
-	}
+public User(String username) {
+    this.username = username;
+}
+public int getUserId() {
+	return userId;
+}
+
+public void setUserId(int id) {
+	this.userId = id;
 }
 
 public int getHighscore() {
@@ -35,4 +38,36 @@ public double getBestAccuracy() {
 	return bestAccuracy;
 }
 
+public int getScore() {
+	return score;
+}
+
+public void setScore(int score) {
+	this.score = score;
+	}
+
+public void setHighScore(int score) {
+	this.score = score;
+}
+
+public void updateHighScore() {
+	if (this.score > this.highscore) {
+		this.highscore = this.score;
+	}
+}
+
+public int getAccuracy() {
+	return accuracy;
+}
+
+public void setAccuracy(int accuracy) {
+	if (accuracy > 100) this.accuracy = 100;
+    else if (accuracy < 0) this.accuracy = 0;
+    else this.accuracy = accuracy;
+}
+
+
+public void resetScore() {
+	this.score = 0;
+}
 }
