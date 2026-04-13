@@ -14,7 +14,7 @@ public class EasyMode implements GameMode {
 	
 	@Override 
 	public void start(GameScreen screen, GameSquare square, User user) {
-		square.modifySquare(200, 1200, 500);
+		square.modifySquare(100, 800, 300);
 		square.spawnRandomSquare();
 	}
 	

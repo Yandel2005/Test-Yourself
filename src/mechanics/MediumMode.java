@@ -27,7 +27,7 @@ public class MediumMode implements GameMode {
 		
 		for (int i = 0; i < 4; i++) {
 			GameSquare newSquare = new GameSquare(screen.getGamePane(), screen, user);
-			newSquare.modifySquare(50,  1500, 300);
+			newSquare.modifySquare(50,  700, 100);
 			
 			if (i == targetIndex) {
 				newSquare.spawnSpecificSquare(targetColor);
