@@ -62,7 +62,6 @@ public class GameScreen {
 		
 		gameScreen = new BorderPane();
 		gamePane = new Pane();
-		setupTypingUI();
 		isGameOver = false;
 		instructionText = new Text("");
 		instructionText.getStyleClass().add("instructions");
@@ -74,6 +73,7 @@ public class GameScreen {
 		
 		gameScreen.setTop(header);
 		gameScreen.setCenter(gamePane);
+		
 		
 		
 	}
@@ -143,54 +143,4 @@ public class GameScreen {
 	}
 	 
 }
-
-	public void initiateTypingChallenge(String word) {
-		this.currentTargetWord = word;
-		this.isGameOver = false;
-		setInstruction("QUICK! TYPE: " + word + "!");
-		gamePane.setDisable(true);
-		typingContainer.setVisible(true);
-	    inputField.clear();
-	    inputField.requestFocus();
-	}
-	
-	public void setupTypingUI() {
-	    typingContainer = new VBox(20);
-	    typingContainer.setAlignment(Pos.CENTER);
-	    
-	    wordToType = new Label();
-	    wordToType.setStyle("-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;");
-	    
-	    inputField = new TextField();
-	    inputField.setMaxWidth(300);
-	    inputField.setStyle("-fx-font-size: 18px;");
-	    
-	    inputField.setOnAction(e -> handleTypingSubmission());
-
-	    typingContainer.getChildren().addAll(new Label("TYPE THIS WORD:"), wordToType, inputField);
-	    typingContainer.setVisible(false);
-	    
-	    gamePane.getChildren().add(typingContainer);
-}
-
-	public void handleTypingSubmission() {
-		String userInput = inputField.getText().trim().toUpperCase();
-		int penalty = 0;
-		
-		if(!userInput.equals(currentTargetWord)) {
-			int minLength = Math.min(userInput.length(), currentTargetWord.length());
-			for (int i = 0; i < minLength; i++) {
-				if (userInput.charAt(i) != currentTargetWord.charAt(i)) penalty += 100;
-			}
-			penalty += Math.abs(userInput.length() - currentTargetWord.length()) * 100;
-			user.setScore(Math.max(0,  user.getScore() - penalty));
-			} else {
-				user.setScore(user.getScore() + 1000);
-		}
-		scoreText.setText("Score: " + user.getScore());
-		
-		typingContainer.setVisible(false);
-		gamePane.setDisable(false);
-		gameMode.start(this, new GameSquare(gamePane, this, user), user);
-	}
 }
