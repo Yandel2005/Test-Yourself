@@ -1,0 +1,49 @@
+.header-title {
+    -fx-fill: red;
+    -fx-font-size: 60px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial";
+}
+
+.instructions {
+	-fx-fill: black;
+	-fx-font-size: 40pt;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+
+.accuracy {
+	-fx-fill: black;
+	-fx-font-size: 40pt;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+
+.score {
+	-fx-fill: black;
+	-fx-font-size: 40pt;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+
+.main-buttons {
+	-fx-font-family: "Arial Black";
+	-fx-font-size: 50px;
+	-fx-text-fill: white;
+	-fx-background-color: #8B0000;
+	-fx-background-radius: 50;
+	-fx-border-radius: 50;
+}
+
+.back-button {
+	-fx-font-family: "Arial Black";
+	-fx-font-size: 30px;
+	-fx-text-fill: White;
+	-fx-background-color: #8B0000;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+}
+
+.instructions {
+	-fx-fill: #FF0000;
+}

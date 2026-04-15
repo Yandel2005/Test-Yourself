@@ -6,6 +6,7 @@ import users.User;
 
 public class EasyMode implements GameMode {
 	public static final int ID = 1;
+
 	
 	@Override
 	public int getGameModeId() {

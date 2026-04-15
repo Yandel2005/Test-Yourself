@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import mechanics.Score;
 import users.User;
@@ -76,6 +78,33 @@ public class GameData {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public List<User> getTopScores() {
+		List<User> topUsers = new ArrayList<>();
+
+		if (this.connection == null) {
+			System.out.println("Connection Failed.");
+			return topUsers;
+		}
+
+		String sql = "SELECT u.username, s.score_value, g.mode_name " +
+				"FROM Scores s " + "JOIN Users u ON s.user_id = u.user_id " + "JOIN game_modes g ON s.game_mode_id = g.game_mode_id " + "ORDER BY s.score_value DESC " + "LIMIT 10";
+
+		try (PreparedStatement stmt = connection.prepareStatement(sql);
+			 ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				User u = new User(rs.getString("username"));
+				u.setScore(rs.getInt("score_value"));
+				u.setModeName(rs.getString("mode_name"));
+				topUsers.add(u);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return topUsers;
 	}
 }
 	

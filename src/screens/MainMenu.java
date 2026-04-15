@@ -14,7 +14,9 @@ import users.User;
 
 public class MainMenu {
 	
-	
+	private GameData db;
+	private GameScreen screen;
+	private ScoreboardScreen sbScreen;
 	private BorderPane gameScreen;
 	private HBox header;
 	private VBox buttonDisplay;
@@ -28,8 +30,8 @@ public class MainMenu {
 		this.gameScreen = new BorderPane();
 		this.buttons = new Buttons();
 		this.buttons.createButtons();
-	
-		GameData db = new GameData();
+
+		this.db = new GameData();
 		this.user = db.getUserByUsername("Player1");
 		if(user == null) {
 			user = new User(0, "Player1");
@@ -37,12 +39,19 @@ public class MainMenu {
 			user.setUserId(generatedId);
 		}
 		this.selectionScreen = new SelectionScreen(primaryStage, this, buttons, this.user, db);
+		this.sbScreen = new ScoreboardScreen(primaryStage, this, this.user, this.db, this.buttons);
 		
 		createHeader();
 		layoutComponents();
 		showGame();
 	}
-	
+
+	public void showScoreBoard() {
+		sbScreen.show();
+
+
+	}
+
 	private void createHeader() {
 		Text title = new Text("TEST YOURSELF");
 		title.getStyleClass().add("header-title");
@@ -56,7 +65,7 @@ public class MainMenu {
 		buttonDisplay.setSpacing(100);
 		gameScreen.setCenter(buttonDisplay);
 		gameScreen.setTop(header);
-		
+		buttons.getBtnSB().setOnAction(event -> primaryStage.getScene().setRoot(sbScreen.getLayout()));
 		buttons.getBtnStart().setOnAction(e -> { primaryStage.getScene().setRoot(selectionScreen.getLayout());
 	});
 		
@@ -69,12 +78,13 @@ public class MainMenu {
 		gameScreen.setCenter(buttonDisplay);
 		gameScreen.setTop(header);
 		gameScreen.setBottom(null);
-		
 		scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 		primaryStage.setScene(scene);
+
 		if (!primaryStage.isMaximized()) {
-	        primaryStage.setMaximized(true);
-	        primaryStage.show();
+			primaryStage.setMaximized(true);
+			primaryStage.show();
+
 	    }
 		
 	}
