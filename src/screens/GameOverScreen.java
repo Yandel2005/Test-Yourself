@@ -20,6 +20,7 @@ public class GameOverScreen {
 	private User user;
 	private MainMenu mainMenu;
 
+
 	public GameOverScreen(Stage primaryStage,  MainMenu mainMenu, Buttons buttons) {
 		this.mainMenu = mainMenu;
 		this.primaryStage = primaryStage;

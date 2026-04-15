@@ -2,6 +2,7 @@ package mechanics;
 
 import java.util.Random;
 
+import mechanics.typeHelper;
 import interfaces.GameMode;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
@@ -15,22 +16,16 @@ import javafx.util.Duration;
 import screens.GameScreen;
 import users.User;
 
+
 public class HardMode implements GameMode {
-	
-	private VBox challengeBox = new VBox();
+
+	typeHelper helper = new typeHelper();
+	Random random = new Random();
 	private int roundNumber = 0;
 	private String chosenWord;
 	public static final int ID = 3;
 	private String targetColor;
 	private boolean challenge = false;
-	
-	private String[] longWords = {
-			"POLYMORPHISM", "ENCAPSULATION", "SYNCHRONIZED",
-			"INHERITANCE", "ABSTRACTION", "INSTANTIATE",
-			"PHENOMENON", "LABYRINTHINE", "QUINTESSENTIAL",
-			"METAMORPHOSIS", "UNFATHOMABLE", "OSCILLATION"};
-	
-	Random rand = new Random();
 	
 	@Override
 	public int getGameModeId() {
@@ -88,58 +83,25 @@ public class HardMode implements GameMode {
    
    private void nextRound(GameScreen screen, GameSquare square, User user) {
 	   roundNumber++;
-		screen.getGamePane().getChildren().clear();
+		screen.getLayout().getChildren().clear();
         
-        int randomNumber = rand.nextInt(4) + 1;
+        int randomNumber = random.nextInt(4) + 1;
         if (roundNumber == randomNumber) {
         	challenge = true;
-        	roundNumber = 0;
-        	startTypingChallenge(screen, square, user);
+        	helper.startTypingChallenge(screen, square, user);
+			PauseTransition pause = new PauseTransition(Duration.millis(5000));
+			pause.setOnFinished(e -> start(screen, square, user));
+			pause.play();
         	return;
+
         }
-        	 PauseTransition pause = new PauseTransition(Duration.millis(300));
-             pause.setOnFinished(e -> start(screen, square, user));
-        pause.play();
+
 	}
    
 	private String pickRandomColor() {
 		int index = (int)(Math.random() * GameSquare.COLORS.length);
 				return GameSquare.COLORS[index];
 	}
-	
-	public void createTypingUI(Pane gamePane) {
-		VBox typingUI = new VBox();
-		Text instructions = new Text("Quick! Type: "  + getRandomWord() + "!");
-		Label label = new Label("TYPE");
-		TextField textField = new TextField();
-		HBox hb = new HBox();
-		hb.getChildren().addAll(label, textField);
-		typingUI.getChildren().addAll(instructions, hb);
-		challengeBox.getChildren().addAll(typingUI);
-
-	}
-
-	private String getRandomWord() {
-		int random_word = rand.nextInt(longWords.length);
-				chosenWord = longWords[random_word];
-				return chosenWord;
-	
-	}
-	
-	private void startTypingChallenge(GameScreen screen, GameSquare square, User user) {
-		screen.getLayout().getChildren().clear();
-		challengeBox.getChildren().clear();
-		createTypingUI(screen.getGamePane());
-		screen.getLayout().getChildren().add(challengeBox);
-		challengeBox.setTranslateX(400);
-		challengeBox.setTranslateY(400);
-		
-	}
-	
-	private void verifyChallenge() {
-	
-	}
-	
 }
 
 	

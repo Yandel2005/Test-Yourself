@@ -9,15 +9,18 @@ private int highscore;
 private int score = 0;
 private int accuracy = 100;
 private double bestAccuracy;
+private String modeName;
 
 public User(int userId, String username) {
 	this.username = username;
 	this.userId = userId;
+	this.score = score;
 }
 
 public User(String username) {
     this.username = username;
 }
+
 public int getUserId() {
 	return userId;
 }
@@ -70,4 +73,7 @@ public void setAccuracy(int accuracy) {
 public void resetScore() {
 	this.score = 0;
 }
+
+    public void setModeName(String modeName) { this.modeName = modeName; }
+	public String getModeName() { return modeName; }
 }

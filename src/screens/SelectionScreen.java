@@ -2,6 +2,7 @@ package screens;
 
 import gameoutput.GameData;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,7 +16,6 @@ import mechanics.MediumMode;
 import users.User;
 
 public class SelectionScreen {
-	
 	private GameData db;
 	private BorderPane layout;
 	private Buttons buttons;
@@ -23,6 +23,7 @@ public class SelectionScreen {
 	private HBox header;
 	private User user;
 	private MainMenu mainMenu;
+	private GameScreen screen;
 	
 	public SelectionScreen(Stage primaryStage, MainMenu mainMenu, Buttons buttons, User user, GameData db) {
 		this.primaryStage = primaryStage;
@@ -33,11 +34,12 @@ public class SelectionScreen {
 		this.mainMenu = mainMenu;
 		
 		VBox difficultyLayout = new VBox(buttons.getBtnEasy(), buttons.getBtnMedium(), buttons.getBtnHard());
-		
+
+		Button back = buttons.getBtnBack();
 		buttons.getBtnEasy().setOnAction(e -> launchGame(EasyMode.ID));
 		buttons.getBtnMedium().setOnAction(e -> launchGame(MediumMode.ID));
 		buttons.getBtnHard().setOnAction(e -> launchGame(HardMode.ID));
-		buttons.getBtnBack().setOnAction(e -> {
+		back.setOnAction(e -> {
 			this.mainMenu.showGame();
 		});
 		
@@ -46,7 +48,7 @@ public class SelectionScreen {
 		difficultyLayout.setSpacing(50);
 		layout.setTop(header);
 		layout.setCenter(difficultyLayout);
-		layout.setBottom(buttons.getBtnBack());
+		layout.setBottom(back);
 		
 	}
 		
@@ -67,4 +69,11 @@ public class SelectionScreen {
 		primaryStage.getScene().setRoot(game.getLayout());
 		game.startGame();
 	}
-}
+
+	private void createScoreBoard() {
+		ScoreboardScreen sbScreen = new ScoreboardScreen(primaryStage, mainMenu, user, db, buttons);
+			sbScreen.show();
+
+		};
+	}
+

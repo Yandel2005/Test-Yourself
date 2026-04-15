@@ -61,13 +61,13 @@ public class Buttons {
 		return btnH; 
 	}
 	
-	public Button getBtnBack() { 
-		return btnBack; 
+	public Button getBtnBack() {
+		Button newBackBtn = new Button("BACK");
+		newBackBtn.getStyleClass().add("back-button");
+		return newBackBtn;
 	}
-	
-	public Button getBtnPA() {
-		return btnPA;
-	}
+
+	public Button getBtnPA() {return btnPA; }
 	
     private void styleButtons() {
 	Button[] buttons = { btnStart, btnSB, btnExit, btnCD, btnE, btnM, btnH, btnPA };

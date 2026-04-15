@@ -118,6 +118,7 @@ public class GameScreen {
 	 }
 	 
 	 public void endGame() {
+
 		 if(isGameOver) return;
 		 isGameOver = true;
 		 gamePane.getChildren().clear();
