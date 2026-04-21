@@ -4,10 +4,7 @@ import javafx.animation.PauseTransition;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import screens.GameOverScreen;
 import screens.GameScreen;
 import users.User;
 

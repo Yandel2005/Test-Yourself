@@ -1,17 +1,18 @@
 package app;
 
 
+import gameoutput.GameData;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import screens.LoginScreen;
 import screens.MainMenu;
 
 public class PlayTestYourself extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) {
-		new MainMenu(primaryStage);
-		
-		
+		GameData db = new GameData();
+		new LoginScreen(primaryStage, db);
 	}
 	
 	public static void main(String[] args) {

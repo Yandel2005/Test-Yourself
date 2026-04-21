@@ -34,7 +34,6 @@ public class TestYourself {
 	private Button btnE;
 	private Button btnM;
 	private Button btnH;
-	private Button btnRestart;
 	private Timeline timeline;
 	
 	public TestYourself(Stage primaryStage) {
@@ -43,7 +42,6 @@ public class TestYourself {
 		gameScreen = new BorderPane();
 	
 		createButtons();
-		styleButtons();
 		createHeader();
 		layoutComponents();
 		createButtonListeners();
@@ -54,9 +52,7 @@ public class TestYourself {
 		btnStart = new Button("START");
 		btnSB = new Button("SCOREBOARD");
 		btnExit = new Button("EXIT");
-		btnRestart = new Button("RESTART");
 		btnBack = new Button("BACK");
-		btnCD = new Button("CHANGE DIFFICULTY");
 		btnE = new Button("EASY");
 		btnM = new Button("MEDIUM");
 		btnH = new Button("HARD");
@@ -67,23 +63,12 @@ public class TestYourself {
 		btnBack.setOnAction(e -> showGame());
 		btnExit.setOnAction(e -> System.exit(0));
 	}
-	
-	private void styleButtons() {
-		Button[] buttons = { btnStart, btnSB, btnExit, btnCD, btnE, btnM, btnH };
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].getStyleClass().add("game-button");
-		}
-		btnBack.getStyleClass().add("back-button");
-	}
-	
+
 	private void createHeader() {
 		Text title = new Text("TEST YOURSELF");
-		title.setFont(Font.font("Arial Black", 70));
+		title.getStyleClass().add("header-title");
 		header = new HBox(title);
-		header.setAlignment(Pos.CENTER);
-		header.setStyle(
-		"-fx-background-radius: 25;" + 
-		"-fx-padding: 30;");
+		header.setAlignment(Pos.TOP_CENTER);
 	}
 	
 	private void layoutComponents() {

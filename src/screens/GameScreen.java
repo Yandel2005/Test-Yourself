@@ -3,30 +3,23 @@ package screens;
 import gameoutput.GameData;
 import interfaces.GameMode;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mechanics.Buttons;
-import mechanics.EasyMode;
+import modes.EasyMode;
 import mechanics.GameSquare;
-import mechanics.HardMode;
-import mechanics.MediumMode;
+import modes.HardMode;
+import modes.MediumMode;
 import mechanics.Score;
 import users.User;
 
 public class GameScreen {
-	
+
 	private Boolean isGameOver;
-	private Label wordToType;
-	private TextField inputField;
-	private String currentTargetWord;
 	private GameData db;
 	private GameMode gameMode;
 	private int gameModeId;
@@ -70,7 +63,7 @@ public class GameScreen {
 		scoreText = new Text("Score: " + user.getScore());
 		scoreText.getStyleClass().add("score");
 		createHeader();
-		
+		gameScreen.getStyleClass().add("mainRoot");
 		gameScreen.setTop(header);
 		gameScreen.setCenter(gamePane);
 		
@@ -79,6 +72,7 @@ public class GameScreen {
 	}
 	
 	public void startGame() {
+
 		gamePane.getChildren().clear();
 		GameSquare square = new GameSquare(gamePane, this, this.user);
 		if (gamePane.getWidth() <= 0) {
@@ -106,12 +100,13 @@ public class GameScreen {
 			endGame();
 		}
 		 }
-	 
+
 	 public void squareClicked(GameSquare square) {
-		 gameMode.onSquareClick(this, square, this.user);
+		 gameMode.onSquareClick(this, square, user);
 		 scoreText.setText("Score: " + user.getScore());
 		 accuracyText.setText("Accuracy: " + user.getAccuracy() + "%");
 	 }
+
 	 
 	 public BorderPane getLayout() {
 		 return gameScreen;
@@ -129,7 +124,7 @@ public class GameScreen {
 		    } else {
 		        System.out.println("Database connection missing!");
 		    }
-		 GameOverScreen gameOver = new GameOverScreen(stage, this.mainMenu, buttons);
+		 GameOverScreen gameOver = new GameOverScreen(stage, this.mainMenu, buttons, user, db);
 		    gameOver.show();
 		 }
 	
@@ -143,5 +138,13 @@ public class GameScreen {
             instructionText.setText(message);
 	}
 	 
+}
+
+public void hideHeader() {
+	gameScreen.setTop(null);
+}
+
+public void showHeader() {
+		gameScreen.setTop(header);
 }
 }
