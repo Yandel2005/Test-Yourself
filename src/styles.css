@@ -1,5 +1,5 @@
 .header-title {
-    -fx-fill: red;
+    -fx-fill:#8B0000;
     -fx-font-size: 60px;
     -fx-font-weight: bold;
     -fx-font-family: "Arial";
@@ -29,7 +29,16 @@
 .main-buttons {
 	-fx-font-family: "Arial Black";
 	-fx-font-size: 50px;
-	-fx-text-fill: white;
+	-fx-padding: 10 20 10 20;
+	-fx-text-fill: black;
+	-fx-background-color: #8B0000;
+	-fx-background-radius: 50;
+	-fx-border-radius: 50;
+}
+.login_buttons {
+	-fx-font-family: "Arial Black";
+	-fx-font-size: 30px;
+	-fx-text-fill: black;
 	-fx-background-color: #8B0000;
 	-fx-background-radius: 50;
 	-fx-border-radius: 50;
@@ -38,7 +47,7 @@
 .back-button {
 	-fx-font-family: "Arial Black";
 	-fx-font-size: 30px;
-	-fx-text-fill: White;
+	-fx-text-fill: black;
 	-fx-background-color: #8B0000;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
@@ -46,4 +55,45 @@
 
 .instructions {
 	-fx-fill: #FF0000;
+}
+
+.label {
+	-fx-fill: black;
+	-fx-font-size: 40pt;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+.text-field {
+	-fx-background-radius: 50;
+	border-radius: 15px;
+}
+.mainRoot {
+	-fx-background-color: #2b2b2b;
+}
+.typeInstructions {
+	-fx-text-fill: black;
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+.header-box {
+	-fx-border-color: black;
+	-fx-border-width: 10;
+}
+.stats {
+	-fx-text-fill: black;
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+.sb-header {
+	-fx-text-fill: #8B0000;
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
+	-fx-font-family: "Arial";
+}
+.error-text {
+	-fx-text-fill: black;
+	-fx-font-weight: bold;
+	-fx-font-size: 20px;
 }

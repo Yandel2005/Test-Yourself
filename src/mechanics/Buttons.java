@@ -16,6 +16,8 @@ public class Buttons {
 	private Button btnM;
 	private Button btnH;
 	private Button btnPA;
+	private Button btnLogin;
+	private Button btnRegister;
 
 	public void createButtons() {
 		btnStart = new Button("START");
@@ -28,6 +30,8 @@ public class Buttons {
 		btnM = new Button("MEDIUM");
 		btnH = new Button("HARD");
 		btnPA = new Button("PLAY AGAIN");
+		btnLogin = new Button("LOGIN");
+		btnRegister = new Button("REGISTER");
 		
 		createButtonListeners();
 		styleButtons();
@@ -36,17 +40,18 @@ public class Buttons {
 	private void createButtonListeners() {
 		btnExit.setOnAction(e -> System.exit(0));
 	}
+
 	
-	public Button getBtnStart() { 
-		return btnStart; 
+	public Button getBtnStart() {
+		return btnStart;
 	}
 	
-    public Button getBtnSB() { 
-    	return btnSB; 
+    public Button getBtnSB() {
+		return btnSB;
     }
     
-    public Button getBtnExit() { 
-    	return btnExit; 
+    public Button getBtnExit() {
+		return btnExit;
     }
     
 	public Button getBtnEasy() { 
@@ -67,13 +72,24 @@ public class Buttons {
 		return newBackBtn;
 	}
 
-	public Button getBtnPA() {return btnPA; }
-	
-    private void styleButtons() {
-	Button[] buttons = { btnStart, btnSB, btnExit, btnCD, btnE, btnM, btnH, btnPA };
-	for (int i = 0; i < buttons.length; i++) {
-		buttons[i].getStyleClass().add("main-buttons");
+	public Button getBtnPA() {
+		return btnPA;
 	}
-	btnBack.getStyleClass().add("back-button");
+
+public Button getBtnLogin() {
+		btnLogin.getStyleClass().add("login_buttons");
+		return btnLogin;
 }
+
+public Button getBtnRegister() {
+		btnRegister.getStyleClass().add("login_buttons");
+		return btnRegister;
+}
+
+	private void styleButtons() {
+		Button[] buttons = {btnStart, btnSB, btnExit, btnCD, btnE, btnM, btnH, btnPA};
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].getStyleClass().add("main-buttons");
+		}
+	}
 }

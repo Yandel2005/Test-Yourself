@@ -1,7 +1,5 @@
 package interfaces;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import mechanics.GameSquare;
 import screens.GameScreen;
 import users.User;

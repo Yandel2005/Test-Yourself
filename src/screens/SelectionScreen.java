@@ -6,13 +6,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mechanics.Buttons;
-import mechanics.EasyMode;
-import mechanics.HardMode;
-import mechanics.MediumMode;
+import modes.EasyMode;
+import modes.HardMode;
+import modes.MediumMode;
 import users.User;
 
 public class SelectionScreen {
@@ -46,6 +45,7 @@ public class SelectionScreen {
 		createHeader();
 		difficultyLayout.setAlignment(Pos.CENTER);
 		difficultyLayout.setSpacing(50);
+		layout.getStyleClass().add("mainRoot");
 		layout.setTop(header);
 		layout.setCenter(difficultyLayout);
 		layout.setBottom(back);
@@ -69,11 +69,5 @@ public class SelectionScreen {
 		primaryStage.getScene().setRoot(game.getLayout());
 		game.startGame();
 	}
-
-	private void createScoreBoard() {
-		ScoreboardScreen sbScreen = new ScoreboardScreen(primaryStage, mainMenu, user, db, buttons);
-			sbScreen.show();
-
-		};
 	}
 
