@@ -5,7 +5,6 @@ import gameoutput.GameData;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import screens.LoginScreen;
-import screens.MainMenu;
 
 public class PlayTestYourself extends Application{
 	

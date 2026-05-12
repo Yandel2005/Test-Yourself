@@ -22,8 +22,7 @@ public class SelectionScreen {
 	private HBox header;
 	private User user;
 	private MainMenu mainMenu;
-	private GameScreen screen;
-	
+
 	public SelectionScreen(Stage primaryStage, MainMenu mainMenu, Buttons buttons, User user, GameData db) {
 		this.primaryStage = primaryStage;
 		this.buttons = buttons;
@@ -31,25 +30,30 @@ public class SelectionScreen {
 		this.layout = new BorderPane();
 		this.db = db;
 		this.mainMenu = mainMenu;
-		
+
+		createHeader();
 		VBox difficultyLayout = new VBox(buttons.getBtnEasy(), buttons.getBtnMedium(), buttons.getBtnHard());
+		difficultyLayout.setAlignment(Pos.CENTER);
 
 		Button back = buttons.getBtnBack();
+		HBox bottomContainer = new HBox(back);
+		bottomContainer.setAlignment(Pos.BOTTOM_LEFT);
 		buttons.getBtnEasy().setOnAction(e -> launchGame(EasyMode.ID));
 		buttons.getBtnMedium().setOnAction(e -> launchGame(MediumMode.ID));
 		buttons.getBtnHard().setOnAction(e -> launchGame(HardMode.ID));
 		back.setOnAction(e -> {
+			mechanics.SoundManager.playClickSound();
 			this.mainMenu.showGame();
 		});
 		
-		createHeader();
+
 		difficultyLayout.setAlignment(Pos.CENTER);
 		difficultyLayout.setSpacing(50);
 		layout.getStyleClass().add("mainRoot");
 		layout.setTop(header);
 		layout.setCenter(difficultyLayout);
-		layout.setBottom(back);
-		
+		layout.setBottom(bottomContainer);
+
 	}
 		
 	private void createHeader() {
@@ -61,7 +65,6 @@ public class SelectionScreen {
 	
 	public BorderPane getLayout() {
 		return this.layout;
-		
 	}
 	
 	private void launchGame(int modeId) {

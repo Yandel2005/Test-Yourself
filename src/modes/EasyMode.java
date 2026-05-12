@@ -22,20 +22,20 @@ public class EasyMode implements GameMode {
 	
 	@Override
 	public void onSquareClick(GameScreen screen, GameSquare square, User user) {
-		int currentScore = user.getScore();
-		int currentAccuracy = user.getAccuracy();
-		user.setScore(currentScore + 100);
-		currentAccuracy = Math.min(100, currentAccuracy + 10);
-		user.setAccuracy(currentAccuracy);
+		user.setScore(user.getScore() + 100);
+		user.setAccuracy(Math.min(100, user.getAccuracy() + 10));
+		nextRound(screen, square, user);
 	}
 	
 	@Override
 	public void onSquareMiss(GameScreen screen, GameSquare square, User user) {
-		int currentAccuracy = user.getAccuracy();
-		currentAccuracy = Math.min(100, currentAccuracy - 10);
-		user.setAccuracy(currentAccuracy);
-		square.spawnRandomSquare();
+		user.setAccuracy(Math.max(0, user.getAccuracy() - 10));
+
+		nextRound(screen, square, user);
 		
 	}
 
+	public void nextRound(GameScreen screen, GameSquare square, User user) {
+		mechanics.SoundManager.playNextRoundSound();
+	}
 }

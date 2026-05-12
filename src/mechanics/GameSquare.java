@@ -22,7 +22,9 @@ public class GameSquare {
 	private int timeLimit;
 	private int delay;
 	public User user;
-	
+	private long spawnTime;
+	private boolean active = true;
+
 	public GameSquare(Pane gamePane, GameScreen gameScreen, User user) {
 		this.gamePane = gamePane;
 		this.gameScreen = gameScreen;
@@ -37,6 +39,7 @@ public class GameSquare {
 
 	public void spawnRandomSquare() {
 		int size = random.nextInt(sizeLimit) + 20;
+		this.spawnTime = System.nanoTime();
 		
 		Rectangle square = new Rectangle(size, size);
 		
@@ -60,10 +63,16 @@ public class GameSquare {
 		square.setFill(Color.color(random.nextDouble(),
 		random.nextDouble(), random.nextDouble()));
 		
-		PauseTransition despawn = new PauseTransition(Duration.millis(timeLimit));
+		this.despawn = new PauseTransition(Duration.millis(timeLimit));
 		
-		square.setOnMouseClicked(e -> { 
-		
+		square.setOnMouseClicked(e -> {
+			if(despawn != null) {
+				despawn.stop();
+			}
+			mechanics.SoundManager.playSquareClick();
+		long clickTime = System.nanoTime();
+			double reactionTimeMs = (clickTime - spawnTime) / 1_000_000.0;
+		user.addReactionTime(reactionTimeMs);
 		gamePane.getChildren().remove(square);
 		gameScreen.squareClicked(this);
 		spawnNextSquare();
@@ -72,23 +81,29 @@ public class GameSquare {
 		gamePane.getChildren().add(square);
 		
 		despawn.setOnFinished(e -> {
-			if(gamePane.getChildren().contains(square)) {
+			if(active && gamePane.getChildren().contains(square)) {
+				mechanics.SoundManager.playNextRoundSound();
 				gamePane.getChildren().remove(square);
 				gameScreen.squareMissed(this);
-				
+				spawnNextSquare();
 			}
 		});
 		despawn.play();
 	}
 	
 	private void spawnNextSquare() {
+		if (!active) return;
 	    PauseTransition pause = new PauseTransition(Duration.millis(delay));
-	    pause.setOnFinished(event -> spawnRandomSquare());
+	    pause.setOnFinished(event -> {
+				if (active) spawnRandomSquare();
+	});
 	    pause.play();
 	}
 
+
 	public void spawnSpecificSquare(String colorName) {
 		this.currentColorName = colorName;
+		this.spawnTime = System.nanoTime();
 		
 		int size = random.nextInt(sizeLimit) + 20;
 		Rectangle square = new Rectangle(size, size);
@@ -121,6 +136,11 @@ public class GameSquare {
 		despawn = new PauseTransition(Duration.millis(timeLimit));
 		
 	    square.setOnMouseClicked(e -> {
+			despawn.stop();
+			mechanics.SoundManager.playSquareClick();
+			long clickTime = System.nanoTime();
+			double reactionTimeSec = (clickTime - spawnTime) / 1_000_000.00;
+			user.addReactionTime(reactionTimeSec);
 	    	despawn.stop();
 	        gamePane.getChildren().remove(square);
 	        gameScreen.squareClicked(this);
@@ -145,4 +165,10 @@ public class GameSquare {
 			despawn.stop();
 		}
 	}
+	public void setInactive() {
+		this.active = false;
+		if (despawn != null) despawn.stop();
+	}
+
+
 	}

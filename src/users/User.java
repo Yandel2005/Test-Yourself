@@ -8,14 +8,14 @@ public class User {
 	private int highscore;
 	private int score = 0;
 	private int accuracy = 100;
-	private double bestAccuracy;
 	private String modeName;
+	private double totalReactionTime = 0;
+	private int clicks = 0;
 
 	public User(int userId, String username, String password) {
 		this.username = username;
 		this.userId = userId;
 		this.password = password;
-		this.score = score;
 	}
 
 	public User(String username) {
@@ -30,16 +30,8 @@ public class User {
 		this.userId = id;
 	}
 
-	public int getHighscore() {
-		return highscore;
-	}
-
 	public String getUsername() {
 		return username;
-	}
-
-	public double getBestAccuracy() {
-		return bestAccuracy;
 	}
 
 	public int getScore() {
@@ -47,10 +39,6 @@ public class User {
 	}
 
 	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public void setHighScore(int score) {
 		this.score = score;
 	}
 
@@ -70,9 +58,6 @@ public class User {
 		else this.accuracy = accuracy;
 	}
 
-	public void resetScore() {
-		this.score = 0;
-	}
 
 	public void setModeName(String modeName) {
 		this.modeName = modeName;
@@ -82,8 +67,18 @@ public class User {
 		return modeName;
 	}
 
-	public String getPassword() {
-		return password;
+
+	public void addReactionTime(double time) {
+		this.totalReactionTime += time;
+		this.clicks++;
+	}
+
+	public double getAverageReactionTime() {
+		if (clicks == 0) {
+			return 0;
+		} else {
+			return totalReactionTime / clicks;
+		}
 	}
 
 }

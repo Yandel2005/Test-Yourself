@@ -14,14 +14,12 @@ import java.util.Random;
 
 public class TypeHelper {
 
-
-    private HardMode hardMode;
-
     Random random = new Random();
 
     private String chosenWord;
 
     private VBox typingUI = new VBox();
+
 
     private String[] longWords = {
             "POLYMORPHISM", "ENCAPSULATION", "SYNCHRONIZED",
@@ -63,7 +61,7 @@ public class TypeHelper {
                     penaltyDescription.setVisible(false);
                     if(newText.equalsIgnoreCase(word)) {
                         javafx.application.Platform.runLater(() -> {
-                            user.setAccuracy(user.getAccuracy() + 30);
+                            user.setAccuracy(user.getAccuracy() + 20);
                             hardMode.stopChallengeTimer();
                             screen.showHeader();
                             screen.getLayout().setCenter(screen.getGamePane());
@@ -72,7 +70,7 @@ public class TypeHelper {
                     }
                     return change;
                 } else {
-                    penalty(user, textField, penaltyDescription);
+                    penalty(user, penaltyDescription, screen);
                     return null;
                 }
             }
@@ -85,25 +83,29 @@ public class TypeHelper {
         });
     }
 
-    public void penalty(User user, TextField textField, Label penaltyDescription ) {
+    public void penalty (User user, Label penaltyDescription, GameScreen screen) {
         penaltyDescription.setVisible(true);
         penaltyDescription.setText("-100!");
         int newScore = user.getScore() - 100;
-
-        if (newScore < 0) {
+        user.setScore(newScore);
+        Text scoreText = screen.getScoreText();
+        scoreText.setText("Score: " + newScore);
+     if (newScore < 0) {
             user.setScore(0);
+            scoreText.setText("Score: 0");
             penaltyDescription.setText("KEEP UP!");
         } else {
+            mechanics.SoundManager.playWrongSound();
             user.setScore(newScore);
-
         }
-
     }
 
-    public void startTypingChallenge(GameScreen screen, GameSquare square, User user, HardMode hardMode) {
+
+    public void startTypingChallenge(GameScreen screen, User user, HardMode hardMode) {
         screen.hideHeader();
         createTypingUI(screen, user, hardMode);
         screen.getLayout().setCenter(typingUI);
+        hardMode.startChallengeTimer(screen);
 
     }
 

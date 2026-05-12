@@ -1,8 +1,6 @@
 package mechanics;
-
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.text.Font;
+import javafx.scene.input.MouseEvent;
 
 public class Buttons {
 	
@@ -38,6 +36,21 @@ public class Buttons {
 	}
 
 	private void createButtonListeners() {
+		Button[] allButtons = {
+				btnStart, btnSB, btnExit, btnRestart,
+				btnBack, btnCD, btnE, btnM,
+				btnH, btnPA, btnLogin, btnRegister
+		};
+
+		for (int i = 0; i < allButtons.length; i++) {
+			Button b = allButtons[i];
+
+			if (b != null) {
+				b.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
+					mechanics.SoundManager.playClickSound();
+				});
+			}
+		}
 		btnExit.setOnAction(e -> System.exit(0));
 	}
 
@@ -54,7 +67,7 @@ public class Buttons {
 		return btnExit;
     }
     
-	public Button getBtnEasy() { 
+	public Button getBtnEasy() {
 		return btnE; 
 	}
 	
@@ -62,14 +75,16 @@ public class Buttons {
 		return btnM; 
 	}
 	
-	public Button getBtnHard() { 
+	public Button getBtnHard() {
 		return btnH; 
 	}
 	
 	public Button getBtnBack() {
-		Button newBackBtn = new Button("BACK");
-		newBackBtn.getStyleClass().add("back-button");
-		return newBackBtn;
+		Button back = new Button("BACK");
+		back.getStyleClass().add("main-buttons");
+		back.getStyleClass().add("back-button");
+
+		return back;
 	}
 
 	public Button getBtnPA() {
@@ -87,7 +102,7 @@ public Button getBtnRegister() {
 }
 
 	private void styleButtons() {
-		Button[] buttons = {btnStart, btnSB, btnExit, btnCD, btnE, btnM, btnH, btnPA};
+		Button[] buttons = {btnStart, btnBack, btnSB, btnExit, btnCD, btnE, btnM, btnH, btnPA};
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].getStyleClass().add("main-buttons");
 		}

@@ -1,11 +1,6 @@
  package gameoutput;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,49 +24,13 @@ public class GameData {
 
 	}
 
-	public int insertUser(User user) {
-		String sql = "INSERT INTO Users (username, password) VALUES (?, ?)";
-		try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			stmt.setString(1, user.getUsername());
-			stmt.setString(2, "defaultPassword");
-			stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (rs.next()) {
-				return rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return -1;
-	}
-
-	public User getUserByUsername(String username) {
-		if (connection == null) return null;
-
-		String query = "SELECT * FROM users WHERE username = ?";
-
-		try (PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setString(1, username);
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-
-					User user = new User(rs.getString("username"));
-					user.setUserId(rs.getInt("user_id"));
-					return user;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public void saveScore(Score score, int gameModeId) {
-		String sql = "INSERT INTO Scores (score_value, user_id, game_mode_id) VALUES (?, ?, ?)";
+	public void saveScore(Score score) {
+		String sql = "INSERT INTO Scores (score_value, user_id, game_mode_id, reaction_time) VALUES (?,?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setInt(1, score.getValue());
 			stmt.setInt(2, score.getUser().getUserId());
 			stmt.setInt(3, score.getGameModeId());
+			stmt.setDouble(4, score.getReactionTime());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,7 +38,7 @@ public class GameData {
 	}
 
 
-	public List<User> getTopScores() {
+	public List<User> getTopScores(int gameModeId) {
 		List<User> topUsers = new ArrayList<>();
 
 		if (this.connection == null) {
@@ -87,18 +46,20 @@ public class GameData {
 			return topUsers;
 		}
 
-		String sql = "SELECT u.username, s.score_value, g.mode_name " +
-				"FROM Scores s " + "JOIN Users u ON s.user_id = u.user_id " + "JOIN game_modes g ON s.game_mode_id = g.game_mode_id " + "ORDER BY s.score_value DESC " + "LIMIT 15";
+		String sql = "SELECT u.username, s.score_value, g.mode_name, s.reaction_time " + "FROM Scores s " + "JOIN Users u ON s.user_id = u.user_id " + "JOIN game_modes g ON s.game_mode_id = g.game_mode_id " + "WHERE g.game_mode_id = ? " + "ORDER BY s.score_value DESC " + "LIMIT 15";
 
-		try (PreparedStatement stmt = connection.prepareStatement(sql);
-		     ResultSet rs = stmt.executeQuery()) {
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-			while (rs.next()) {
-				User u = new User(rs.getString("username"));
-				u.setScore(rs.getInt("score_value"));
-				u.setModeName(rs.getString("mode_name"));
-				topUsers.add(u);
-			}
+			stmt.setInt(1, gameModeId);
+			 try (ResultSet rs = stmt.executeQuery()) {
+				 while (rs.next()) {
+					 User u = new User(rs.getString("username"));
+					 u.setScore(rs.getInt("score_value"));
+					 u.setModeName(rs.getString("mode_name"));
+					 u.addReactionTime(rs.getDouble("reaction_time"));
+					 topUsers.add(u);
+				 }
+			 }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,6 +78,9 @@ public class GameData {
 			stmt.setString(2, password);
 			int affectedRows = stmt.executeUpdate();
 			return affectedRows > 0;
+		} catch (SQLIntegrityConstraintViolationException e) {
+			System.out.println("Username already exists");
+					return false;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -136,9 +100,22 @@ public class GameData {
 				}
 			}
 		} catch (SQLException e) {
+			System.out.println("THIS USER EXISTSS.");
 			e.printStackTrace();
 		}
 		return null;
 	}
-}
-	
+
+	public boolean userExists(String username) {
+		String sql = "SELECT 1 FROM Users WHERE username = ?";
+
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}}
+
