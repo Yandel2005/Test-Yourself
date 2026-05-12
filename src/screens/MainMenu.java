@@ -39,12 +39,6 @@ public class MainMenu {
 		showGame();
 	}
 
-	public void showScoreBoard() {
-		sbScreen.show();
-
-
-	}
-
 	private void createHeader() {
 		Text title = new Text("TEST YOURSELF");
 		title.getStyleClass().add("header-title");

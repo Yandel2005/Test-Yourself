@@ -3,10 +3,8 @@ package modes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import interfaces.GameMode;
 import javafx.animation.PauseTransition;
-import javafx.util.Duration;
 import mechanics.GameSquare;
 import mechanics.TypeHelper;
 import screens.GameScreen;
@@ -19,10 +17,10 @@ public class HardMode implements GameMode {
 	TypeHelper helper = new TypeHelper();
 	Random random = new Random();
 	private int roundNumber = 0;
-	private String chosenWord;
 	public static final int ID = 3;
 	private String targetColor;
 	private boolean challenge = false;
+	private double challengeChance;
 	
 	@Override
 	public int getGameModeId() {
@@ -68,7 +66,7 @@ public class HardMode implements GameMode {
 			square.stopTimer();
 			clearCurrentRound();
 			screen.getGamePane().getChildren().clear();
-			user.setScore(user.getScore() + 200);
+			user.setScore(user.getScore() + 100);
 			user.setAccuracy(user.getAccuracy() + 10);
 			nextRound(screen, square, user);
 		} else {
@@ -82,26 +80,34 @@ public class HardMode implements GameMode {
 		user.setAccuracy(user.getAccuracy() - 20);
 	   nextRound(screen, square, user);
    }
-   
-   private void nextRound(GameScreen screen, GameSquare square, User user) {
+   @Override
+   public void nextRound(GameScreen screen, GameSquare square, User user) {
+	mechanics.SoundManager.playNextRoundSound();
 		roundNumber++;
+		challengeChance = random.nextDouble();
 
-        int randomNumber = random.nextInt(3) + 1;
-		int randomNumber2 = random.nextInt(3) + 1;
-        if (randomNumber == randomNumber2 && roundNumber > 1) {
+		if(roundNumber >= 2 && challengeChance < 0.30) {
 			challenge = true;
+			roundNumber = 0;
+
 			screen.getGamePane().getChildren().clear();
-			helper.startTypingChallenge(screen, square, user, this);
-			challengeTimer = new PauseTransition(Duration.millis(5000));challengeTimer.setOnFinished(e -> start(screen, square, user));
-			challengeTimer.play();
+			helper.startTypingChallenge(screen, user, this);
 		} else {
 			start(screen, square, user);
-        }
+		}
 	}
    
 	private String pickRandomColor() {
 		int index = (int)(Math.random() * GameSquare.COLORS.length);
 				return GameSquare.COLORS[index];
+	}
+
+	public void startChallengeTimer(GameScreen screen) {
+		challengeTimer = new PauseTransition(javafx.util.Duration.seconds(4));
+		challengeTimer.setOnFinished(e -> {
+			screen.endGame();
+		});
+		challengeTimer.play();
 	}
 
 	public void stopChallengeTimer() {

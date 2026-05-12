@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mechanics.Buttons;
@@ -19,6 +18,7 @@ import users.User;
 
 public class GameScreen {
 
+	private GameSquare currentSquare;
 	private Boolean isGameOver;
 	private GameData db;
 	private GameMode gameMode;
@@ -32,8 +32,6 @@ public class GameScreen {
 	private Text scoreText;
 	private Buttons buttons;
 	private User user;
-	private VBox typingContainer;
-	private BorderPane mainMenuLayout;
 	private MainMenu mainMenu;
 	
 	
@@ -74,15 +72,15 @@ public class GameScreen {
 	public void startGame() {
 
 		gamePane.getChildren().clear();
-		GameSquare square = new GameSquare(gamePane, this, this.user);
+		this.currentSquare = new GameSquare(gamePane, this, this.user);
 		if (gamePane.getWidth() <= 0) {
 			gamePane.widthProperty().addListener((obs, oldVal, newVal) -> {
 				if (newVal.doubleValue() > 0 && gamePane.getChildren().isEmpty()) {
-					gameMode.start(this, square, this.user);
+					gameMode.start(this, currentSquare, this.user);
 				}
 			});
 		} else {
-		gameMode.start(this, square, this.user);
+		gameMode.start(this, currentSquare, this.user);
 	}
 }
 	private void createHeader() {
@@ -116,11 +114,14 @@ public class GameScreen {
 
 		 if(isGameOver) return;
 		 isGameOver = true;
+		 if(currentSquare != null) {
+			 currentSquare.setInactive();
+		 }
 		 gamePane.getChildren().clear();
 		 user.updateHighScore();
-		 Score finalScore = new Score(this.user, this.user.getScore(), this.gameMode.getGameModeId());
+		 Score finalScore = new Score(this.user, this.user.getScore(), this.gameMode.getGameModeId(), this.user.getAverageReactionTime());
 		 if (db != null) {
-		        db.saveScore(finalScore, finalScore.getGameModeId());
+		        db.saveScore(finalScore);
 		    } else {
 		        System.out.println("Database connection missing!");
 		    }
@@ -137,8 +138,8 @@ public class GameScreen {
 		if (instructionText != null) {
             instructionText.setText(message);
 	}
-	 
 }
+
 
 public void hideHeader() {
 	gameScreen.setTop(null);
@@ -147,4 +148,10 @@ public void hideHeader() {
 public void showHeader() {
 		gameScreen.setTop(header);
 }
+
+public Text getScoreText() {
+		return scoreText;
 }
+
+}
+
